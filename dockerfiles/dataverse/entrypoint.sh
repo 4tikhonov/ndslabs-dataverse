@@ -107,23 +107,20 @@ if [ "$1" = 'dataverse' ]; then
 		./setup-irods.sh
 	fi
 
-    TWORAVENS_PORT=$TWORAVENS_NODE_PORT
-    if [ -n "$TWORAVENS_PORT" ]; then
+    if [ -n "$TWORAVENS_NODE_PORT" ]; then
             EXTERNAL_IP=$(curl -s http://api.ipify.org)
-            #TWORAVENS_PORT=30001
-            TWORAVENS_URL="http://$EXTERNAL_IP:$TWORAVENS_PORT"
+            TWORAVENS_URL="http://$EXTERNAL_IP:$TWORAVENS_NODE_PORT"
             echo "Using TwoRavens at $TWORAVENS_URL"
+            curl -s -X PUT -d $TWORAVENS_URL/dataexplore/gui.html http://localhost:8080/api/admin/settings/:TwoRavensUrl
+	elif [ -n "$TWORAVENS_PORT_80_TCP_PORT" ]; then
+			# Assumes ingress
+			TWORAVENS_URL="https://$NDSLABS_STACK-tworavens.$NDSLABS_DOMAIN"
             curl -s -X PUT -d $TWORAVENS_URL/dataexplore/gui.html http://localhost:8080/api/admin/settings/:TwoRavensUrl
     fi
 
     echo -e "\n\nDataverse started"
 
-
 	sleep infinity
-
-elif [ "$1" = 'usage' ]; then
-    echo  'docker run -d -p 8080:8080 --link rserve:rserve --link postgres:postgres --link solr:solr -e "SMTP_HOST=smtp.ncsa.illinois.edu" -e "HOST_DNS_ADDRESS=localhost" -e "MAIL_SERVER=smtp.ncsa.illinois.edu" -e "POSTGRES_DATABASE=dvndb" -e "POSTGRES_USER=dvnapp" -e "POSTGRES_PASSWORD=secret" -e "RSERVE_USER=rserve" -e "RSERVE_PASSWORD=rserve" --name=dataverse  ndslabs/dataverse dataverse'
-
 else
     exec "$@"
 fi
