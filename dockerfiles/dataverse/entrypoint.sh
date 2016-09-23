@@ -107,15 +107,9 @@ if [ "$1" = 'dataverse' ]; then
 		./setup-irods.sh
 	fi
 
-    if [ -n "$TWORAVENS_NODE_PORT" ]; then
-            EXTERNAL_IP=$(curl -s http://api.ipify.org)
-            TWORAVENS_URL="http://$EXTERNAL_IP:$TWORAVENS_NODE_PORT"
-            echo "Using TwoRavens at $TWORAVENS_URL"
-            curl -s -X PUT -d $TWORAVENS_URL/dataexplore/gui.html http://localhost:8080/api/admin/settings/:TwoRavensUrl
-	elif [ -n "$TWORAVENS_PORT_80_TCP_PORT" ]; then
-			# Assumes ingress
-			TWORAVENS_URL="https://$NDSLABS_STACK-tworavens.$NDSLABS_DOMAIN"
-            curl -s -X PUT -d $TWORAVENS_URL/dataexplore/gui.html http://localhost:8080/api/admin/settings/:TwoRavensUrl
+	if [ -n "$TWORAVENS_PORT_80_TCP_PORT" ] && [ -n "$TWORAVENS_URL" ]; then
+        echo "Using TwoRavens at $TWORAVENS_URL"
+        curl -s -X PUT -d $TWORAVENS_URL/dataexplore/gui.html http://localhost:8080/api/admin/settings/:TwoRavensUrl
     fi
 
     echo -e "\n\nDataverse started"
