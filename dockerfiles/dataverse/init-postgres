@@ -155,6 +155,7 @@ else {
     print TMPCMD $sql_command;
     close TMPCMD;
 
+	$ENV{"PGPASSWORD"} = $ENV{"POSTGRES_PASSWORD"};
     my $psql_commandline = $psql_exec . "/psql -U postgres -h " . $CONFIG_DEFAULTS{'POSTGRES_HOST'} . " -p " . $CONFIG_DEFAULTS{'POSTGRES_PORT'} . " -f /tmp/pgcmd.$$.tmp >/dev/null 2>&1";
 
     my $out      = qx($psql_commandline 2>&1);
