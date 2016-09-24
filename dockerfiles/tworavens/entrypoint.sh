@@ -9,7 +9,7 @@ if [ "$1" = 'tworavens' ]; then
 	echo You must specify DATAVERSE_URL
 	exit 1
   fi
-  o
+  
   if [ -z "$TWORAVENS_URL" ]; then
 	echo You must specify TWORAVENS_URL
 	exit 1
