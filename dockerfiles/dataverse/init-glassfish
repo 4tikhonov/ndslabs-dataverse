@@ -10,7 +10,7 @@ export ASADMIN_OPTS="--user admin --passwordfile /tmp/tmppwd"
 
 ./asadmin $ASADMIN_OPTS create-jdbc-connection-pool --restype javax.sql.DataSource \
     --datasourceclassname org.postgresql.ds.PGPoolingDataSource \
-    --property create=true:User=$POSTGRES_USER:PortNumber=$POSTGRES_PORT:databaseName=$POSTGRES_DATABASE:password=$POSTGRES_PASSWORD:ServerName=$POSTGRES_HOST \
+    --property create=true:User=$POSTGRES_USER:PortNumber=$POSTGRES_PORT:databaseName=$POSTGRES_DB:password=$POSTGRES_PASSWORD:ServerName=$POSTGRES_HOST \
     dvnDbPool
 
 ./asadmin $ASADMIN_OPTS create-jdbc-resource --connectionpoolid dvnDbPool jdbc/VDCNetDS
