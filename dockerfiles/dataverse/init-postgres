@@ -138,7 +138,7 @@ if ( ( my $exitcode = system($psql_command_rolecheck) ) == 0 ) {
 else {
     # 4e. CREATE DVN DB USER:
 
-    print "\nCreating Postgres user (role) for the DVN: " .  $CONFIG_DEFAULTS{'POSTGRES_USER'} . "\n";
+    print "\nCreatinkkkg Postgres user (role) for the DVN: " .  $CONFIG_DEFAULTS{'POSTGRES_USER'} . "\n";
 
     open TMPCMD, ">/tmp/pgcmd.$$.tmp";
 
@@ -156,7 +156,7 @@ else {
     close TMPCMD;
 
 	$ENV{"PGPASSWORD"} = $ENV{"POSTGRES_PASSWORD"};
-    my $psql_commandline = $psql_exec . "/psql -U postgres -h " . $CONFIG_DEFAULTS{'POSTGRES_HOST'} . " -p " . $CONFIG_DEFAULTS{'POSTGRES_PORT'} . " -f /tmp/pgcmd.$$.tmp >/dev/null 2>&1";
+    my $psql_commandline = $psql_exec . "/psql -U postgres -h " . $CONFIG_DEFAULTS{'POSTGRES_HOST'} . " -p " . $CONFIG_DEFAULTS{'POSTGRES_PORT'} . " -f /tmp/pgcmd.$$.tmp";
 
     my $out      = qx($psql_commandline 2>&1);
     my $exitcode = $?;
