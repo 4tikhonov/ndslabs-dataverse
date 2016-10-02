@@ -40,6 +40,8 @@ my %POSTGRES_DRIVERS = (
     "9_2", "postgresql-9.1-902.jdbc4.jar"
 );
 
+$ENV{"PGPASSWORD"} = $ENV{"POSTGRES_PASSWORD"};
+
 # Create SQL reference data
 my $SQL_REFERENCE_DATA     = "reference_data_filtered.sql";
 my $SQL_REFERENCE_TEMPLATE = "../database/reference_data.sql";
@@ -155,7 +157,6 @@ else {
     print TMPCMD $sql_command;
     close TMPCMD;
 
-	$ENV{"PGPASSWORD"} = $ENV{"POSTGRES_PASSWORD"};
     my $psql_commandline = $psql_exec . "/psql -U postgres -h " . $CONFIG_DEFAULTS{'POSTGRES_HOST'} . " -p " . $CONFIG_DEFAULTS{'POSTGRES_PORT'} . " -f /tmp/pgcmd.$$.tmp";
 
     my $out      = qx($psql_commandline 2>&1);
