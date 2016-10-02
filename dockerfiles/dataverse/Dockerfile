@@ -63,16 +63,16 @@ COPY config-dataverse /root/dvinstall
 
 RUN cd /root/dvinstall && ./config-dataverse
 
-VOLUME /usr/local/glassfish4/glassfish/domains/domain1/files
+COPY entrypoint.sh /
 COPY ddl /root/dvinstall
 COPY init-postgres /root/dvinstall
 COPY init-glassfish /root/dvinstall
 COPY init-dataverse /root/dvinstall
 COPY setup-all.sh /root/dvinstall
 COPY setup-irods.sh /root/dvinstall
-
-COPY entrypoint.sh /
 COPY Dockerfile /
+
+VOLUME /usr/local/glassfish4/glassfish/domains/domain1/files
 
 EXPOSE      8080 
 
