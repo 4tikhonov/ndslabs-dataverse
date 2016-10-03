@@ -49,5 +49,5 @@ system("./setup-all.sh");
 
 system ("curl -s -X PUT -d " . $CONFIG_DEFAULTS{'SOLR_HOST'} . ":" . $CONFIG_DEFAULTS{'SOLR_PORT'} . " http://localhost:8080/api/admin/settings/:SolrHostColonPort");
 
-print "\nRestarting Glassfish\n";
+print "\nRestarting Glassfish -- this could take a minute\n";
 system("./restart-glassfish");

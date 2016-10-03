@@ -16,7 +16,7 @@ RUN yum install -y \
 ENV GLASSFISH_DOWNLOAD_SHA1 d1a103d06682eb08722fbc9a93089211befaa080
 ENV GLASSFISH_DIRECTORY "/usr/local/glassfish4"
 ENV HOST_DNS_ADDRESS "localhost"
-ENV POSTGRES_DATABASE "dvndb"
+ENV POSTGRES_DB "dvndb"
 ENV POSTGRES_USER "dvnapp"
 ENV RSERVE_USER "rserve"
 ENV RSERVE_PASSWORD "rserve"
@@ -49,8 +49,6 @@ RUN  cd ~ \
     && wget https://github.com/IQSS/dataverse/releases/download/v4.2.3/dvinstall-4.2.3.zip \
     && unzip dvinstall-4.2.3.zip \
     && jar -uf dvinstall/dataverse.war -C /tmp/ /WEB-INF/classes/META-INF/persistence.xml
-
-RUN ln -s /usr/local/glassfish4/glassfish/domains/domain1/logs /var/log/dataverse
 
 # Install iRods iCommands
 RUN  cd /tmp \

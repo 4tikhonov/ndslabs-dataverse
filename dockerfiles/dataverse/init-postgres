@@ -177,17 +177,15 @@ else {
 #
 print "Creating Postgres database: " . $CONFIG_DEFAULTS{'POSTGRES_DB'} . "\n";
 
-my $newdb = 0;
 
 my $psql_command_dbcheck =
   $psql_exec . "/psql -q -h " . $CONFIG_DEFAULTS{'POSTGRES_HOST'} . " -p " . $CONFIG_DEFAULTS{'POSTGRES_PORT'} . " -c \"\" -d " . $CONFIG_DEFAULTS{'POSTGRES_DB'} . " " . $CONFIG_DEFAULTS{'POSTGRES_USER'} . " >/dev/null 2>&1";
 
-#print "$psql_command_dbcheck\n";
+print "$psql_command_dbcheck\n";
 
 if ( ( my $exitcode = system($psql_command_dbcheck) ) == 0 ) {
     print "Database " . $CONFIG_DEFAULTS{'POSTGRES_DB'} . " already exists;\n";
 } else {
-
    my $psql_command =
        $psql_exec
      . "/createdb "
@@ -207,8 +205,20 @@ if ( ( my $exitcode = system($psql_command_dbcheck) ) == 0 ) {
        print STDERR "(STDOUT and STDERR: " . $out . ")\n";
        exit 1;
    }
+}
+
+my $psql_command_tablecheck =
+  $psql_exec . "/psql -q -h " . $CONFIG_DEFAULTS{'POSTGRES_HOST'} . " -p " . $CONFIG_DEFAULTS{'POSTGRES_PORT'} . " -c \"select count(*) from dataverse\" -d " . $CONFIG_DEFAULTS{'POSTGRES_DB'} . " " . $CONFIG_DEFAULTS{'POSTGRES_USER'} . " >/dev/null 2>&1";
+
+print "$psql_command_tablecheck\n";
+
+my $newdb = 0;
+if ( ( my $exitcode = system($psql_command_tablecheck) ) == 0 ) {
+    print "Database tables already exist;\n";
+} else {
    $newdb = 1;
 }
+
 
 if ($newdb) {
    print "Initializing postgres database\n";
@@ -217,41 +227,46 @@ if ($newdb) {
    print "Executing DDL\n";
    my $psql_ddl_command = $psql_exec
      . "/psql -q "
-     . " -U postgres"
      . " -h " . $CONFIG_DEFAULTS{'POSTGRES_HOST'}
      . " -p " . $CONFIG_DEFAULTS{'POSTGRES_PORT'}
      . " -d " . $CONFIG_DEFAULTS{'POSTGRES_DB'}
+     . " " . $CONFIG_DEFAULTS{'POSTGRES_USER'}
      . " -f " . "createDDL.sql";
 
-	 #print "$psql_ddl_command\n";
+   print "$psql_ddl_command\n";
 
    if ( my $exitcode = system($psql_ddl_command) == 0 ) {
        print "Executed DDL\n";
    } else {
+       print "Failed to execute DDL.\n";
    }
 
    print "Loading reference data\n";
    my $psql_init_command =
        $psql_exec
      . "/psql -q "
-     . " -U postgres"
      . " -h " . $CONFIG_DEFAULTS{'POSTGRES_HOST'}
      . " -p " . $CONFIG_DEFAULTS{'POSTGRES_PORT'}
      . " -d " . $CONFIG_DEFAULTS{'POSTGRES_DB'}
+     . " " . $CONFIG_DEFAULTS{'POSTGRES_USER'}
      . " -f " . $SQL_REFERENCE_DATA;
+
+   print "$psql_init_command\n";
 
    if ( my $exitcode = system($psql_init_command ) == 0 ) {
        print "Loaded reference data\n";
    } else {
+       print "Failed to load reference data.\n";
    }
 
+   print "Granting privileges\n";
    my $psql_grant_command =
        $psql_exec
      . "/psql -q "
-     . " -U postgres"
      . " -h " . $CONFIG_DEFAULTS{'POSTGRES_HOST'}
      . " -p " . $CONFIG_DEFAULTS{'POSTGRES_PORT'}
      . " -d " . $CONFIG_DEFAULTS{'POSTGRES_DB'}
+     . " " . $CONFIG_DEFAULTS{'POSTGRES_USER'}
 	 . " -c \"GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO " . $CONFIG_DEFAULTS{'POSTGRES_USER'} ."; GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO " . $CONFIG_DEFAULTS{'POSTGRES_USER'} . "\"";
 
    if ( my $exitcode = system($psql_grant_command ) == 0 ) {
