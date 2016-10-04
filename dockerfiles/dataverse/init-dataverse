@@ -51,7 +51,7 @@ system ("curl -s -X PUT -d " . $CONFIG_DEFAULTS{'SOLR_HOST'} . ":" . $CONFIG_DEF
 
 if ( defined $ENV{"TWORAVENS_URL"} && defined $ENV{"TWORAVENS_PORT_80_TCP_PORT"} ) {
     print "Using TwoRavens at " . $ENV{'TWORAVENS_URL'} . "\n";
-    system ("curl -s -X PUT -d " . $ENV{'TWORAVENS_URL'} . "dataexplore/gui.html" . " http://localhost:8080/api/admin/settings/:TwoRavensUrl");
+    system ("curl -s -X PUT -d " . $ENV{'TWORAVENS_URL'} . "/dataexplore/gui.html" . " http://localhost:8080/api/admin/settings/:TwoRavensUrl");
 }
 
 print "\nRestarting Glassfish -- this could take a minute\n";
