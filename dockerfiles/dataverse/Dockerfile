@@ -40,15 +40,10 @@ RUN cd /tmp \
     && chmod +x /usr/local/bin/jq-linux64 \
     && ln -s /usr/local/bin/jq-linux64 /usr/local/bin/jq
 
-# Customized persistence xml to avoid database recreation
-RUN mkdir -p /tmp/WEB-INF/classes/META-INF/ 
-COPY WEB-INF/classes/META-INF/persistence.xml /tmp/WEB-INF/classes/META-INF/
+COPY dvinstall.zip /root
 
 # Install DataVerse WAR
-RUN  cd ~ \
-    && wget https://github.com/IQSS/dataverse/releases/download/v4.2.3/dvinstall-4.2.3.zip \
-    && unzip dvinstall-4.2.3.zip \
-    && jar -uf dvinstall/dataverse.war -C /tmp/ /WEB-INF/classes/META-INF/persistence.xml
+RUN  cd /root && unzip dvinstall.zip 
 
 # Install iRods iCommands
 RUN  cd /tmp \

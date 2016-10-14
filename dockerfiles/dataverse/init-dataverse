@@ -54,5 +54,11 @@ if ( defined $ENV{"TWORAVENS_URL"} && defined $ENV{"TWORAVENS_PORT_80_TCP_PORT"}
     system ("curl -s -X PUT -d " . $ENV{'TWORAVENS_URL'} . "/dataexplore/gui.html" . " http://localhost:8080/api/admin/settings/:TwoRavensUrl");
 }
 
+if ( defined $ENV{"TOOLMANAGER_URL"} ) {
+    print "Using Tool Manager at " . $ENV{'TOOLMANAGER_URL'} . "\n";
+    system ("curl -s -X PUT -d " . $ENV{'TOOLMANAGER_URL'} . " http://localhost:8080/api/admin/settings/:NDSToolManagerUrl");
+    system ("curl -s -X PUT -d " . $ENV{'NDSLABS_HOSTNAME'} . " http://localhost:8080/api/admin/settings/:DataverseHostname");
+}
+
 print "\nRestarting Glassfish -- this could take a minute\n";
 system("./restart-glassfish");
